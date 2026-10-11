@@ -1,0 +1,46 @@
+{
+	"name": "3minapi",
+	"version": "0.22.0",
+	"description": "Run your machine as a 3Min API host — the CLI that fetches tasks from your AI and runs them with your own worker files",
+	"keywords": [
+		"3minapi",
+		"mcp",
+		"ai",
+		"worker",
+		"cli",
+		"tasks"
+	],
+	"license": "MIT",
+	"author": "Maverick Works",
+	"homepage": "https://3minapi.com",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/maverick-works-dev/3minapi-cli.git"
+	},
+	"bugs": {
+		"url": "https://github.com/maverick-works-dev/3minapi-cli/issues"
+	},
+	"type": "module",
+	"bin": {
+		"3minapi": "dist/bin.js"
+	},
+	"files": [
+		"dist"
+	],
+	"engines": {
+		"node": ">=24.12.0"
+	},
+	"scripts": {
+		"dev": "node src/bin.ts",
+		"build": "node -e \"fs.rmSync('dist',{recursive:true,force:true})\" && tsc -p tsconfig.build.json",
+		"prepack": "npm run build",
+		"test": "node --test --test-timeout=60000",
+		"lint": "tsc --noEmit && prettier --check .",
+		"format": "prettier --write ."
+	},
+	"devDependencies": {
+		"@types/node": "24.10.1",
+		"prettier": "3.7.3",
+		"typescript": "5.9.3"
+	}
+}

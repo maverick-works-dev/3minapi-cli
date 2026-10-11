@@ -1,0 +1,58 @@
+# Publishes the package to npm when a version tag is pushed.
+# Trusted publishing (OIDC): no token is stored here, and npm attaches provenance automatically.
+# The job stages the release; it goes live only after a maintainer approves it on npmjs.com with 2FA.
+# Source: apps/cli/mirror/publish.yml in the private monorepo — edits here are overwritten by the next sync.
+name: publish
+
+on:
+  push:
+    tags: ['v*']
+
+permissions: {}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.12.0
+          registry-url: https://registry.npmjs.org
+
+      # `npm stage publish` needs npm 11.15.0 or later; Node 24.12.0 ships 11.6.2.
+      - name: Install npm
+        run: npm install -g npm@11.20.0
+
+      - name: Check the release
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          node -e '
+            const p = require("./package.json");
+            const fail = (m) => { console.error(m); process.exit(1); };
+            if (process.env.TAG !== "v" + p.version) fail(`tag ${process.env.TAG} != package.json v${p.version}`);
+            const repo = "git+https://github.com/maverick-works-dev/3minapi-cli.git";
+            if (p.repository?.url !== repo) fail(`repository.url must be ${repo} (provenance checks it exactly)`);
+            for (const k of ["dependencies", "optionalDependencies", "peerDependencies", "bundleDependencies"])
+              if (p[k] && Object.keys(p[k]).length) fail(`${k} must be empty: the CLI has no runtime dependencies`);
+            for (const k of ["preinstall", "install", "postinstall", "prepare"])
+              if (p.scripts?.[k]) fail(`scripts.${k} must not exist: nothing runs on the user'"'"'s install`);
+          '
+
+      - name: Install build tools
+        run: npm ci --ignore-scripts
+
+      - name: List package contents
+        run: npm pack --dry-run
+
+      # prepack builds dist/ before packing.
+      - name: Stage on npm
+        run: npm stage publish
