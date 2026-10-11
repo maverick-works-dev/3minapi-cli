@@ -10,12 +10,12 @@ TypeScript functions on your PC.
 ## Install
 
 ```sh
-npm install -g 3minapi
+npm install -g @3minapi/cli
 3minapi --version
 3minapi doctor        # checks Node.js, config, network and proxy settings
 ```
 
-`npx 3minapi <command>` runs it without installing. On Windows PowerShell, if scripts are disabled, type
+`npx @3minapi/cli <command>` runs it without installing. On Windows PowerShell, if scripts are disabled, type
 `3minapi.cmd` in place of `3minapi`.
 
 ## Quick start
@@ -71,7 +71,7 @@ Every command takes `--json` for machine-readable output. Log in yourself — ne
 
 ```sh
 3minapi stop                 # if start is running
-npm install -g 3minapi@latest
+npm install -g @3minapi/cli@latest
 ```
 
 The CLI tells you when a newer version is recommended, and stops with exit code 6 when it is too old to connect.

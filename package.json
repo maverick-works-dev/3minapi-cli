@@ -1,5 +1,5 @@
 {
-	"name": "3minapi",
+	"name": "@3minapi/cli",
 	"version": "0.22.0",
 	"description": "Run your machine as a 3Min API host — the CLI that fetches tasks from your AI and runs them with your own worker files",
 	"keywords": [
@@ -27,6 +27,9 @@
 	"files": [
 		"dist"
 	],
+	"publishConfig": {
+		"access": "public"
+	},
 	"engines": {
 		"node": ">=24.12.0"
 	},

@@ -5,7 +5,7 @@
 Only the latest published minor version of `3minapi` receives security fixes. Update with:
 
 ```sh
-npm i -g 3minapi@latest
+npm i -g @3minapi/cli@latest
 ```
 
 ## Reporting a vulnerability

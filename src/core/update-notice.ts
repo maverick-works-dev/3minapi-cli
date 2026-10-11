@@ -12,7 +12,7 @@
  *
  * ⚠️ The notice must never fail a command. meta read/write failures are all swallowed — and recorded in the given `log` (app log).
  */
-import { BIN, ENV, type HostCli } from './domain/index.ts';
+import { BIN, ENV, PACKAGE_NAME, type HostCli } from './domain/index.ts';
 import type { ControlDb } from './control-db.ts';
 import { parseVersion } from './version.ts';
 
@@ -69,10 +69,12 @@ export function runsFromNpx(entry: string | undefined = process.argv[1]): boolea
 /**
  * The update command — **a single command**. Not chained with `&&` (Windows PowerShell 5.1 rejects `&&` as a syntax error).
  * Does not append `start` — it runs in the foreground and never ends (an AI running it as is would hang), and the original `-d`/`--serve` would be lost.
- * npx has no install — one call with `@latest` fetches the new version (and later calls stay `npx 3minapi@latest <command>`)
+ * npx has no install — one call with `@latest` fetches the new version (and later calls stay `npx @3minapi/cli@latest <command>`)
  */
 export function updateCommand(entry: string | undefined = process.argv[1]): string {
-	return runsFromNpx(entry) ? `npx ${BIN}@latest --version` : `npm i -g ${BIN}@latest`;
+	return runsFromNpx(entry)
+		? `npx ${PACKAGE_NAME}@latest --version`
+		: `npm i -g ${PACKAGE_NAME}@latest`;
 }
 
 /**
@@ -86,9 +88,9 @@ export function updateNote(
 	// With npx, a running process also stays on the old version — it must restart to pick up the new one
 	const npx = runsFromNpx(entry);
 	const restart = npx
-		? `stop it with '${BIN} stop' and start it again as 'npx ${BIN}@latest start'`
+		? `stop it with '${BIN} stop' and start it again as 'npx ${PACKAGE_NAME}@latest start'`
 		: `stop it first with '${BIN} stop' and start it again after the update`;
-	const keep = npx ? ` Keep running it as 'npx ${BIN}@latest <command>'.` : '';
+	const keep = npx ? ` Keep running it as 'npx ${PACKAGE_NAME}@latest <command>'.` : '';
 	if (running === null) return `If '${BIN} start' is running in the background, ${restart}.${keep}`;
 	if (running) return `'${BIN} start' is running — ${restart}.${keep}`;
 	return npx ? keep.trim() : null;

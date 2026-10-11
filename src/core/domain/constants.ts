@@ -5,6 +5,8 @@
  */
 
 export const BIN = '3minapi';
+/** npm package name — differs from BIN: npm refused the unscoped `3minapi` as too similar to an existing package */
+export const PACKAGE_NAME = '@3minapi/cli';
 
 /** Minimum Node — the version where type stripping became stable (docs/design/15_cli.md §2) */
 export const MIN_NODE_VERSION = '24.12.0';
