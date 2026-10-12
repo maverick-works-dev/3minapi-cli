@@ -76,6 +76,12 @@ npm install -g @3minapi/cli@latest
 
 The CLI tells you when a newer version is recommended, and stops with exit code 6 when it is too old to connect.
 
+## Where releases come from
+
+Releases are built and published by GitHub Actions from the public repository
+[maverick-works-dev/3minapi-cli](https://github.com/maverick-works-dev/3minapi-cli), with npm provenance. The
+**Provenance** section on the npm package page links each version to the commit and workflow run that built it.
+
 ## Links
 
 - Guide: [3minapi.com](https://3minapi.com)
