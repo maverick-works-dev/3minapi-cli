@@ -168,7 +168,7 @@ function describeOne(db: DatabaseSync, taskId: string, hostId: string, runNo?: n
 			? out
 			: {
 					...out,
-					error: { message: 'the saved error is too large to show; read it with op "read"' }
+					error: { message: 'the saved error is too large to show; read it with task_result_read' }
 				};
 	}
 	return {
@@ -601,7 +601,7 @@ function readText(
 function missing(path: string): Failure {
 	return new Failure(
 		'read_out_of_range',
-		`${path} does not exist in this result — check the paths with op "describe"`
+		`${path} does not exist in this result — check the paths with task_result_describe`
 	);
 }
 

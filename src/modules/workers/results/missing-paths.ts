@@ -89,6 +89,6 @@ export function missingPathsWarning(missing: string[]): string {
 	const more = missing.length - shown.length;
 	return (
 		`No result in the scope has ${shown.join(', ')}${more > 0 ? ` and ${more} more` : ''}, so ` +
-		`${missing.length === 1 ? 'it reads' : 'they read'} as NULL — op "describe" lists the paths the results have.`
+		`${missing.length === 1 ? 'it reads' : 'they read'} as NULL — task_result_describe lists the paths the results have.`
 	);
 }

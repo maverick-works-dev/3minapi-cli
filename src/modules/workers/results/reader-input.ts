@@ -33,12 +33,14 @@ export type ReaderOutcome =
 	| { ok: true; result: unknown }
 	| { ok: false; reason: FailureReason; message: string };
 
-/** Input shape guide appended to invalid_input messages, enough for an AI to retry from it alone */
+/**
+ * Guide appended to invalid_input messages, enough for an AI to retry from it alone. Phrased as the MCP result tools'
+ * arguments — the server builds this input from them, and a task created for the reader directly is rejected (#1537)
+ */
 export const READER_USAGE =
-	'input is one of: {"op":"describe","task_id":"…","run_no?":1} | {"op":"describe","worker":"…","since?":"ISO date"} | ' +
-	'{"op":"query","sql":"SELECT … FROM results …","worker?":"…","task_id?":"…","task_ids?":["…"],"since?":"ISO date","expect_shape?":"…"} ' +
-	'(at least one of worker, task_id, task_ids, since) | {"op":"read","task_id":"…","run_no?":1,"path?":"$.items","offset?":0,"limit?":100} ' +
-	'(run_no picks a run of a repeating task; the latest run when left out)';
+	'Use task_result_describe with task_id (and run_no) or worker (and since); task_result_query with sql and at least ' +
+	'one of worker, task_id, task_ids, since (and expect_shape); or task_result_read with task_id (and run_no, path, ' +
+	'offset, limit). run_no picks a run of a repeating task; the latest run when left out';
 
 /** task_id — the server issues UUIDv7; only the character set is constrained (it is inlined as a literal) */
 const TASK_ID = /^[0-9A-Za-z-]{1,64}$/;
